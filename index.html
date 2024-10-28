@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', Helvetica, sans-serif;
+            background-color: #2E3A47; /* Adjust background to a more neutral tone */
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #4B5A6A; /* Adjust to a darker tone */
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .main {
+            display: flex;
+            flex: 1;
+        }
+
+        aside {
+            background-color: #394855; /* Slightly different from header for visual separation */
+            color: white;
+            width: 250px;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        aside nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        aside nav ul li {
+            margin-bottom: 15px;
+        }
+
+        aside nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        aside nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            background-color: white;
+            padding: 20px;
+            flex: 1;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .content h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .content button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .content button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px; /* More padding for better readability */
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f5f5f5; /* Softer background for table headers */
+        }
+
+        table tr:hover {
+            background-color: #eaeaea;
+        }
+
+        footer {
+            background-color: #4B5A6A;
+            padding: 20px;
+            text-align: center;
+            color: #FFF;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 400px;
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .modal-footer button {
+            padding: 10px 15px; /* More padding for button comfort */
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .modal-footer button.cancel {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .modal-footer button.save {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .btn-group button {
+            margin-right: 5px;
+            padding: 5px 10px; /* Adjust padding to make buttons smaller */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Admin Panel</h1>
+            <button>Log Out</button>
+        </header>
+
+        <div class="main">
+            <aside>
+                <nav>
+                    <ul>
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">Mahasiswa</a></li>
+                        <li><a href="#">Settings</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <div class="content">
+                <h2>Daftar Mahasiswa</h2>
+                <button id="btnAdd">Tambah Mahasiswa</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>NIM</th>
+                            <th>Nama</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mahasiswaList">
+                        <tr>
+                            <td>1.</td>
+                            <td>A11.1980.12345</td>
+                            <td>Vinsen</td>
+                            <td class="btn-group">
+                                <button onclick="editMahasiswa()">Edit</button>
+                                <button onclick="confirmDelete()">Hapus</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>A11.1980.12346</td>
+                            <td>Budi</td>
+                            <td class="btn-group">
+                                <button onclick="editMahasiswa()">Edit</button>
+                                <button onclick="confirmDelete()">Hapus</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2024 Admin Panel
+        </footer>
+    </div>
+
+    <!-- Modal Tambah Mahasiswa -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addModal')">&times;</span>
+            <h2>Tambah Mahasiswa</h2>
+            <form id="addForm">
+                <label for="nim">NIM:</label>
+                <input type="text" id="nim" name="nim"><br><br>
+                <label for="nama">Nama:</label>
+                <input type="text" id="nama" name="nama"><br><br>
+            </form>
+            <div class="modal-footer">
+                <button class="cancel" onclick="closeModal('addModal')">Cancel</button>
+                <button class="save" onclick="saveMahasiswa()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Mahasiswa -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editModal')">&times;</span>
+            <h2>Edit Mahasiswa</h2>
+            <form id="editForm">
+                <label for="editNim">NIM:</label>
+                <input type="text" id="editNim" name="editNim"><br><br>
+                <label for="editNama">Nama:</label>
+                <input type="text" id="editNama" name="editNama"><br><br>
+            </form>
+            <div class="modal-footer">
+                <button class="cancel" onclick="closeModal('editModal')">Cancel</button>
+                <button class="save" onclick="saveEdit()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Konfirmasi Hapus -->
+    <div id="deletePopup" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('deletePopup')">&times;</span>
+            <h2>Konfirmasi Hapus</h2>
+            <p>Apakah Anda yakin ingin menghapus data ini?</p>
+            <div class="modal-footer">
+                <button class="cancel" onclick="closeModal('deletePopup')">Cancel</button>
+                <button class="save" onclick="deleteMahasiswa()">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        // Tambah Mahasiswa
+        document.getElementById("btnAdd").onclick = function() {
+            openModal('addModal');
+        };
+
+        function saveMahasiswa() {
+            // Logic to save mahasiswa
+            closeModal('addModal');
+        }
+
+        // Edit Mahasiswa
+        function editMahasiswa() {
+            openModal('editModal');
+        }
+
+        function saveEdit() {
+            // Logic to save edit
+            closeModal('editModal');
+        }
+
+        // Hapus Mahasiswa
+        function confirmDelete() {
+            openModal('deletePopup');
+        }
+
+        function deleteMahasiswa() {
+            // Logic to delete mahasiswa
+            closeModal('deletePopup');
+        }
+    </script>
+</body>
+</html>
